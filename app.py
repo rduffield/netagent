@@ -2,6 +2,7 @@
 
 import datetime
 import json
+import sys
 import time
 from stats import ProcNetNetstat
 
@@ -9,7 +10,10 @@ class App(object):
     """Main app"""
     def __init__(self):
         super(App, self).__init__()
-        self.stats = ProcNetNetstat()
+        if sys.platform == 'darwin':
+            self.stats = ProcNetNetstat('tests/netstat')
+        else:
+            self.stats = ProcNetNetStat()
 
     def run(self):
         while True:

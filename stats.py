@@ -1,10 +1,11 @@
 class ProcNetNetstat:
-    def __init__(self):
-        pass
+    def __init__(self, netstat='/proc/net/netstat'):
+        self.netstat = netstat
     
     def run(self):
         dat = {}
-        for line in open('/proc/net/netstat','r').readlines():
+        f = open(self.netstat, 'r')
+        for line in f.readlines():
             line = line.split()
             name = line[0]
             line.remove(name)
@@ -13,4 +14,5 @@ class ProcNetNetstat:
                 dat[name] = line
             else:
                 dat[name] = dict(zip(dat[name], line))
+        f.close()
         return dat
