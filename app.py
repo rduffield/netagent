@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import datetime
+import json
 import time
 from stats import ProcNetNetstat
 
@@ -11,8 +13,10 @@ class App(object):
 
     def run(self):
         while True:
-            self.stats.run()
-            time.sleep(5)
+            data = self.stats.run()
+            data['Date'] = time.mktime(datetime.datetime.utcnow().timetuple())
+            print json.dumps(data)
+            time.sleep(10)
 
 if __name__ == '__main__':
     app = App()
