@@ -8,8 +8,9 @@ class ProcNetNetstat:
             line = line.split()
             name = line[0]
             line.remove(name)
+            name = name.split(':')[0]
             if name not in dat:
                 dat[name] = line
             else:
-                dat[name] = dict(zip(dat[name],line))
-        return dat['TcpExt:']
+                dat[name] = dict(zip(dat[name], line))
+        return dat
