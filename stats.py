@@ -15,4 +15,4 @@ class ProcNetNetstat:
             else:
                 dat[name] = dict(zip(dat[name], line))
         f.close()
-        return dat
+        return dat.get('TcpExt')
