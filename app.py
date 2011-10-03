@@ -13,7 +13,7 @@ class App(object):
         if sys.platform == 'darwin':
             self.stats = ProcNetNetstat('tests/netstat')
         else:
-            self.stats = ProcNetNetStat()
+            self.stats = ProcNetNetstat()
 
     def run(self):
         while True:
