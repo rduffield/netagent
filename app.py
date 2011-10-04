@@ -26,10 +26,17 @@ class App(object):
             self.stats = ProcNetNetstat()
 
     def run(self):
+        start = datetime.datetime.utcnow()
+        data = []
         while True:
             stats = self.stats.run()
-            data = [{'agentKey': self.agent_key, 'plugins': {'ProcNetNetstat': stats}, 'tA': time.mktime(datetime.datetime.utcnow().timetuple())}]
-            self._post_to_api(data)
+            data.append({'agentKey': self.agent_key, 'plugins': {'ProcNetNetstat': stats}, 'tA': time.mktime(datetime.datetime.utcnow().timetuple())})
+            now = datetime.datetime.utcnow()
+            difference = now - start
+            if difference.seconds >= 60:
+                self._post_to_api(data)
+                start = now
+                data = []
             print stats
             time.sleep(5)
 
@@ -39,10 +46,6 @@ class App(object):
             url,
             auth=(self.username, self.password),
             data={'payload': json.dumps(data)})
-        if response.ok:
-            print response.content
-        else:
-            print 'error posting to api'
 
 if __name__ == '__main__':
     usage = 'usage: %prog [options]'
