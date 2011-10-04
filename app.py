@@ -28,8 +28,7 @@ class App(object):
     def run(self):
         while True:
             stats = self.stats.run()
-            data = {'plugins': {'ProcNetNetstat': stats}, 'tA': time.mktime(datetime.datetime.utcnow().timetuple())}
-            data['agentKey'] = self.agent_key
+            data = [{'agentKey': self.agent_key, 'plugins': {'ProcNetNetstat': stats}, 'tA': time.mktime(datetime.datetime.utcnow().timetuple())}]
             self._post_to_api(data)
             print stats
             time.sleep(5)
