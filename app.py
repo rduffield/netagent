@@ -9,16 +9,17 @@ from optparse import OptionParser
 from stats import ProcNetNetstat
 
 class App(object):
-    def __init__(self, username, password, account, api_key, device_id, agent_key):
+    def __init__(self, username, password, account, api_key, device_id, agent_key, api_host):
         super(App, self).__init__()
-        
+
         self.username = username
         self.password = password
         self.account = account
         self.api_key = api_key
         self.device_id = device_id
         self.agent_key = agent_key
-        
+        self.api_host = api_host
+
         if sys.platform == 'darwin':
             self.stats = ProcNetNetstat('tests/netstat')
         else:
@@ -32,14 +33,18 @@ class App(object):
             data['agentKey'] = self.agent_key
             self._post_to_api(data)
             print stats
-            time.sleep(60)
-            
+            time.sleep(5)
+
     def _post_to_api(self, data):
+        url = '%s?deviceId=%s&apiKey=%s&account=%s' % (self.api_host, self.device_id, self.api_key, self.account)
         response = requests.post(
-            'https://api.serverdensity.com/1.3/metrics/postback?deviceId=%s&apiKey=%s&account=%s' % (self.device_id, self.api_key, self.account),
+            url,
             auth=(self.username, self.password),
             data={'payload': json.dumps(data)})
-        print response.ok
+        if response.ok:
+            print response.content
+        else:
+            print 'error posting to api'
 
 if __name__ == '__main__':
     usage = 'usage: %prog [options]'
@@ -50,10 +55,11 @@ if __name__ == '__main__':
     parser.add_option('-k', '--key', dest='api_key', help='Server Density API key')
     parser.add_option('-d', '--deviceid', dest='device_id', help='device ID')
     parser.add_option('-g', '--agentkey', dest='agent_key', help='device agent key')
+    parser.add_option('-o', '--host', dest='api_host', help='Server Density API host')
     (options, args) = parser.parse_args()
-    
-    if options.username and options.password and options.account and options.api_key and options.device_id and options.agent_key:
-        app = App(options.username, options.password, options.account, options.api_key, options.device_id, options.agent_key)
+
+    if options.username and options.password and options.account and options.api_key and options.device_id and options.agent_key and options.api_host:
+        app = App(options.username, options.password, options.account, options.api_key, options.device_id, options.agent_key, options.api_host)
         app.run()
     else:
         parser.error('incorrect number of arguments')
