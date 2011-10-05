@@ -10,7 +10,7 @@ class Poster(object):
     """
     Class for posting results to Server Density.
     """
-    def __init__(self, username, password, account, api_key, device_id, agent_key, api_host, log_file):
+    def __init__(self, username, password, account, api_key, device_id, agent_key, api_host, log_file, plugin='ProcNetNetstat'):
         super(Poster, self).__init__()
         self.username = username
         self.password = password
@@ -20,6 +20,7 @@ class Poster(object):
         self.agent_key = agent_key
         self.api_host = api_host
         self.log_file = log_file
+        self.plugin = plugin
         self.position = 0
 
     def run(self):
@@ -32,7 +33,7 @@ class Poster(object):
             now = datetime.datetime.utcnow()
             for content in contents:
                 self.position = f.tell()
-                data.append({'agentKey': self.agent_key, 'plugins': {'ProcNetNetstat': json.loads(content)}, 'tA': time.mktime(datetime.datetime.utcnow().timetuple())})
+                data.append({'agentKey': self.agent_key, 'plugins': {self.plugin: json.loads(content)}, 'tA': time.mktime(datetime.datetime.utcnow().timetuple())})
                 difference = now - start
                 if difference.seconds >= 60:
                     self._post_to_api(data)
