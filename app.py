@@ -1,11 +1,8 @@
 #!/usr/bin/env python
 
-import datetime
-import json
-import requests
 import sys
+import json
 import time
-from optparse import OptionParser
 from stats import ProcNetNetstat
 
 class App(object):
@@ -20,6 +17,7 @@ class App(object):
         while True:
             stats = self.stats.run()
             sys.stdout.write(json.dumps(stats))
+            sys.stdout.write('\n')
             sys.stdout.flush()
             time.sleep(5)
 
