@@ -2,6 +2,7 @@
 
 import datetime
 import json
+import requests
 import time
 from optparse import OptionParser
 
@@ -24,25 +25,21 @@ class Poster(object):
     def run(self):
         start = datetime.datetime.utcnow()
         data = []
-        try:
-            while True:
-                f = open(self.log_file, 'r')
-                f.seek(self.position, 0)
-                contents = f.readlines()
-                now = datetime.datetime.utcnow()
-                for content in contents:
-                    self.position = f.tell()
-                    data.append({'agentKey': self.agent_key, 'plugins': {'ProcNetNetstat': json.loads(content)}, 'tA': time.mktime(datetime.datetime.utcnow().timetuple())})
-                    difference = now - start
-                    if difference.seconds >= 60:
-                        print 'posting to api'
-                        self._post_to_api(data)
-                        start = now
-                        data = []
-                f.close()
-                time.sleep(1)
-        finally:
+        while True:
+            f = open(self.log_file, 'r')
+            f.seek(self.position, 0)
+            contents = f.readlines()
+            now = datetime.datetime.utcnow()
+            for content in contents:
+                self.position = f.tell()
+                data.append({'agentKey': self.agent_key, 'plugins': {'ProcNetNetstat': json.loads(content)}, 'tA': time.mktime(datetime.datetime.utcnow().timetuple())})
+                difference = now - start
+                if difference.seconds >= 60:
+                    self._post_to_api(data)
+                    start = now
+                    data = []
             f.close()
+            time.sleep(1)
 
     def _post_to_api(self, data):
         url = '%s?deviceId=%s&apiKey=%s&account=%s' % (self.api_host, self.device_id, self.api_key, self.account)
