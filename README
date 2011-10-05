@@ -1,0 +1,7 @@
+Collecting metrics:
+
+./app.py -k TcpExt > log.txt
+
+Bulk posting those metrics:
+
+./poster.py -u user -p pass -k your_api_key -a example.serverdensity.com -d device_id -g agent_key -o https://api.serverdensity.com/1.3/metrics/bulkpostback log.txt
