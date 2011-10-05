@@ -1,9 +1,10 @@
 class ProcNetNetstat:
-    def __init__(self, netstat='/proc/net/netstat'):
+    def __init__(self, netstat='/proc/net/netstat', key='TcpExt'):
         self.netstat = netstat
+        self.key = key
 
     def _floatify(self, key):
-        self.dat.get('TcpExt')[key] = float(self.dat.get('TcpExt').get(key))
+        self.dat.get(self.key)[key] = float(self.dat.get(self.key).get(key))
 
     def run(self):
         dat = {}
@@ -19,5 +20,5 @@ class ProcNetNetstat:
                 dat[name] = dict(zip(dat[name], line))
         f.close()
         self.dat = dat
-        map(self._floatify, dat.get('TcpExt').keys())
-        return dat.get('TcpExt')
+        map(self._floatify, dat.get(self.key).keys())
+        return dat.get(self.key)
