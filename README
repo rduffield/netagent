@@ -5,3 +5,5 @@ Collecting metrics:
 Bulk posting those metrics:
 
 ./poster.py -u user -p pass -k your_api_key -a example.serverdensity.com -d device_id -g agent_key -o https://api.serverdensity.com/1.3/metrics/bulkpostback log.txt
+
+The poster will continue to post metrics as long as the log file given continues being written to.
