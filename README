@@ -1,6 +1,6 @@
 Collecting metrics:
 
-./netstat.py TcpExt > log.txt
+./netstat.py > log.txt
 
 Bulk posting those metrics:
 
