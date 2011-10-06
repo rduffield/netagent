@@ -33,7 +33,7 @@ class Poster(object):
             now = datetime.datetime.utcnow()
             for content in contents:
                 self.position = f.tell()
-                data.append({'agentKey': self.agent_key, 'plugins': {self.plugin: json.loads(content)}, 'tA': time.mktime(datetime.datetime.utcnow().timetuple())})
+                data.append({'agentKey': self.agent_key, 'plugins': json.loads(content), 'tA': time.mktime(datetime.datetime.utcnow().timetuple())})
                 difference = now - start
                 if difference.seconds >= 60:
                     self._post_to_api(data)
