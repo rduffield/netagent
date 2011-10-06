@@ -59,10 +59,16 @@ if __name__ == '__main__':
     parser.add_option('-d', '--deviceid', dest='device_id', help='device ID')
     parser.add_option('-g', '--agentkey', dest='agent_key', help='device agent key')
     parser.add_option('-o', '--host', dest='api_host', help='Server Density API host')
+    parser.add_option('-l', '--plugin', dest='plugin', help='plugin name')
     (options, args) = parser.parse_args()
 
+    if options.plugin:
+        plugin = options.plugin
+    else:
+        plugin = 'ProcNetNetstat'
+
     if options.username and options.password and options.account and options.api_key and options.device_id and options.agent_key and options.api_host and len(args):
-        p = Poster(options.username, options.password, options.account, options.api_key, options.device_id, options.agent_key, options.api_host, args[0])
+        p = Poster(options.username, options.password, options.account, options.api_key, options.device_id, options.agent_key, options.api_host, args[0], plugin=plugin)
         p.run()
     else:
         parser.error('incorrect number of arguments')
