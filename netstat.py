@@ -6,14 +6,13 @@ import time
 from optparse import OptionParser
 from stats import ProcNetNetstat
 
-class App(object):
-    def __init__(self, key):
-        super(App, self).__init__()
-        self.key = key
+class Netstat(object):
+    def __init__(self):
+        super(Netstat, self).__init__()
         if sys.platform == 'darwin':
-            self.stats = ProcNetNetstat('tests/netstat', key=key)
+            self.stats = ProcNetNetstat('tests/netstat')
         else:
-            self.stats = ProcNetNetstat(key=key)
+            self.stats = ProcNetNetstat()
 
     def run(self):
         while True:
@@ -27,12 +26,7 @@ if __name__ == '__main__':
     usage = 'usage: %prog key'
     parser = OptionParser(usage=usage)
     (options, args) = parser.parse_args()
-
-    if len(args) == 1:
-        app = App(args[0])
-        app.run()
-    else:
-        parser.error('incorrect number of arguments')
-        sys.exit(1)
+    netstat = Netstat()
+    netstat.run()
 
         
