@@ -24,13 +24,12 @@ class App(object):
             time.sleep(5)
 
 if __name__ == '__main__':
-    usage = 'usage: %prog [options]'
+    usage = 'usage: %prog key'
     parser = OptionParser(usage=usage)
-    parser.add_option('-k', '--key', dest='key', help='key to collect data for e.g. TcpExt')
     (options, args) = parser.parse_args()
 
-    if options.key:
-        app = App(options.key)
+    if len(args) == 1:
+        app = App(args[0])
         app.run()
     else:
         parser.error('incorrect number of arguments')

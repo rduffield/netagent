@@ -1,3 +1,4 @@
 *.pyc
 run
 runlocal
+log.txt
