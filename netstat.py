@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-import sys
+import datetime
 import json
+import sys
 import time
 from optparse import OptionParser
 from stats import ProcNetNetstat
@@ -17,6 +18,7 @@ class Netstat(object):
     def run(self):
         while True:
             stats = self.stats.run()
+            stats['Date'] = time.mktime(datetime.datetime.utcnow().timetuple())
             sys.stdout.write(json.dumps(stats))
             sys.stdout.write('\n')
             sys.stdout.flush()
